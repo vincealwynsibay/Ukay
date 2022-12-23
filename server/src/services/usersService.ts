@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import ExpressError from "../utils/ExpressError";
 import User from "../models/User";
 import bcrypt from "bcryptjs";
@@ -48,7 +49,7 @@ const register = async (userCredentials: any) => {
 };
 
 // get user by id
-const getById = async (id: string) => {
+const getById = async (id: Types.ObjectId) => {
 	const user = await User.findById(id);
 	return user;
 };
@@ -72,7 +73,7 @@ const getByEmail = async (email: string) => {
 };
 
 // update user
-const update = async (id: string, userCredentials: any) => {
+const update = async (id: Types.ObjectId, userCredentials: any) => {
 	const user = await User.findById(id);
 
 	if (!user) {
@@ -95,8 +96,8 @@ const update = async (id: string, userCredentials: any) => {
 };
 
 // delete user
-const _delete = async (id: string) => {
-	const user = await User.findByIdAndDelete(id);
+const _delete = async (id: Types.ObjectId) => {
+	await User.findByIdAndDelete(id);
 	return;
 };
 
