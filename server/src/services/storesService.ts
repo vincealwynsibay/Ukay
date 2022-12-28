@@ -1,8 +1,6 @@
 import { Types } from "mongoose";
 import ExpressError from "src/utils/ExpressError";
 import Store from "../models/Store";
-import Review from "../models/Review";
-import Order from "../models/Order";
 
 // create store
 const create = async (user_id: Types.ObjectId, storeParams: any) => {
@@ -20,7 +18,7 @@ const create = async (user_id: Types.ObjectId, storeParams: any) => {
 };
 
 // get by id
-const getById = async (id: Types.ObjectId) => {
+const getById = async (id: string) => {
 	const store = await Store.findById(id);
 	return store;
 };
@@ -64,7 +62,7 @@ const toggleFollow = async (user_id: Types.ObjectId, store_id: string) => {
 // update store
 const update = async (
 	user_id: Types.ObjectId,
-	store_id: Types.ObjectId,
+	store_id: string,
 	storeParams: any
 ) => {
 	const store = await Store.findById(store_id);
@@ -95,7 +93,7 @@ const update = async (
 };
 
 // delete store
-const _delete = async (user_id: Types.ObjectId, store_id: Types.ObjectId) => {
+const _delete = async (user_id: Types.ObjectId, store_id: string) => {
 	const store = await Store.findById(store_id);
 
 	if (!store) {
