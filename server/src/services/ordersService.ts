@@ -4,7 +4,7 @@ import Order from "../models/Order";
 import { Types } from "mongoose";
 
 // create order
-const create = async (user_id: Types.ObjectId, product_id: Types.ObjectId) => {
+const create = async (user_id: Types.ObjectId, product_id: string) => {
 	const product = await Product.findById(product_id);
 	if (!product) throw new Error("Product not found");
 
@@ -54,7 +54,7 @@ const getOrdersByUser = async (user_id: Types.ObjectId) => {
 };
 
 // get orders by store
-const getOrdersByStore = async (store_id: Types.ObjectId) => {
+const getOrdersByStore = async (store_id: string) => {
 	const orders = await Order.find({ store_id: store_id });
 	return orders;
 };

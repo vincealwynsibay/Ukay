@@ -4,7 +4,7 @@ import Reservation from "src/models/Reservation";
 import ExpressError from "src/utils/ExpressError";
 
 // create reservation
-const create = async (user_id: Types.ObjectId, product_id: Types.ObjectId) => {
+const create = async (user_id: Types.ObjectId, product_id: string) => {
 	const product = await Product.findById(product_id);
 
 	if (!product) {
@@ -29,7 +29,7 @@ const getReservationsByUser = async (user_id: Types.ObjectId) => {
 };
 
 // get reservations by product
-const getReservationsByProduct = async (product_id: Types.ObjectId) => {
+const getReservationsByProduct = async (product_id: string) => {
 	const reservations = await Reservation.find({ product_id: product_id });
 	return reservations;
 };
@@ -53,7 +53,7 @@ const deleteById = async (user_id: Types.ObjectId, id: Types.ObjectId) => {
 // get queue list
 // remove reservation in front, if older than 2 hours
 // queue list updates whenever a reservation is created or deleted or someone visits the product page
-const getQueueList = async (product_id: Types.ObjectId) => {
+const getQueueList = async (product_id: string) => {
 	const product = await Product.findById(product_id);
 
 	if (!product) {

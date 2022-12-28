@@ -7,7 +7,7 @@ import ExpressError from "../utils/ExpressError";
 // create review of store if already has an order from store
 const createReview = async (
 	user_id: Types.ObjectId,
-	store_id: Types.ObjectId,
+	store_id: string,
 	reviewParams: any
 ) => {
 	const store = await Store.findById(store_id);
