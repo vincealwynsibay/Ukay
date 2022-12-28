@@ -3,16 +3,14 @@ import mongoose, { Schema, model, Types } from "mongoose";
 interface IReservation {
 	_id: Types.ObjectId;
 	product_id: Types.ObjectId;
-	store_id: Types.ObjectId;
 	user_id: Types.ObjectId;
 	createdAt: Date;
 }
 
 const reservationSchema = new Schema<IReservation>({
 	product_id: { type: Schema.Types.ObjectId, ref: "Product" },
-	store_id: { type: Schema.Types.ObjectId, ref: "Store" },
 	user_id: { type: Schema.Types.ObjectId, ref: "User" },
-	createdAt: { type: Date, required: true, default: Date.now },
+	createdAt: { type: Date, required: true, default: new Date() },
 });
 
 reservationSchema.set("toJSON", {
