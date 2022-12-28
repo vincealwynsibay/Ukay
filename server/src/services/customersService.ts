@@ -60,7 +60,7 @@ const update = async (id: Types.ObjectId, customerCredentials: any) => {
 };
 
 // delete by user_id
-const _delete = async (user_id: Types.ObjectId, id: Types.ObjectId) => {
+const _delete = async (user_id: Types.ObjectId, id: string) => {
 	const customer = await Customer.findById(id);
 
 	if (!customer) {
@@ -89,6 +89,6 @@ export default {
 	getByUsername,
 	getByUserId,
 	update,
-	_delete,
+	delete: _delete,
 	changeAvatar,
 };
