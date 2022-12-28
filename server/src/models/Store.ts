@@ -22,7 +22,7 @@ const storeProfileSchema = new Schema<IStoreProfile>({
 	description: { type: String, required: true },
 	followers: [{ type: Schema.Types.ObjectId, ref: "User" }],
 	reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }],
-	createdAt: { type: Date, required: true, default: Date.now },
+	createdAt: { type: Date, required: true, default: new Date() },
 });
 
 storeProfileSchema.set("toJSON", {

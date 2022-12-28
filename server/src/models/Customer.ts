@@ -1,14 +1,18 @@
 import mongoose, { Schema, model, Types } from "mongoose";
 
-interface IUserProfileSchema {
+interface ICustomer {
 	_id: Types.ObjectId;
+	user_id: Types.ObjectId;
+	username: string;
 	avatarUrl: string;
 	description: string;
 	following: Types.ObjectId[];
 	reservations: Types.ObjectId[];
 }
 
-const userProfileSchema = new Schema<IUserProfileSchema>({
+const customerSchema = new Schema<ICustomer>({
+	user_id: { type: Schema.Types.ObjectId, ref: "User", required: true },
+	username: { type: String, required: true, unique: true },
 	avatarUrl: {
 		type: String,
 		required: true,
@@ -19,7 +23,7 @@ const userProfileSchema = new Schema<IUserProfileSchema>({
 	reservations: [{ type: Schema.Types.ObjectId, ref: "Reservation" }],
 });
 
-userProfileSchema.set("toJSON", {
+customerSchema.set("toJSON", {
 	virtuals: true,
 	versionKey: false,
 	transform: function (_doc, ret) {
@@ -27,6 +31,6 @@ userProfileSchema.set("toJSON", {
 	},
 });
 
-const userProfileModel = model("UserProfile", userProfileSchema);
+const customerModel = model("Customer", customerSchema);
 
-export default userProfileModel;
+export default customerModel;

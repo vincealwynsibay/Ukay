@@ -60,12 +60,6 @@ const getAll = async () => {
 	return users;
 };
 
-// get user by username
-const getByUsername = async (username: string) => {
-	const user = await User.findOne({ username: username });
-	return user;
-};
-
 // get user by email
 const getByEmail = async (email: string) => {
 	const user = await User.findOne({ email: email });
@@ -78,15 +72,6 @@ const update = async (id: Types.ObjectId, userCredentials: any) => {
 
 	if (!user) {
 		throw new ExpressError(`User ${id} not found`, 404);
-	}
-
-	if (user.username !== userCredentials.username) {
-		if (await User.findOne({ username: userCredentials.username })) {
-			throw new ExpressError(
-				"Username " + userCredentials.username + " is already taken",
-				400
-			);
-		}
 	}
 
 	Object.assign(user, userCredentials);
@@ -106,7 +91,6 @@ export default {
 	register,
 	getById,
 	getAll,
-	getByUsername,
 	getByEmail,
 	update,
 	delete: _delete,
