@@ -1,10 +1,10 @@
 import Store from "../models/Store";
-import { Types } from "mongoose";
 import Product from "../models/product";
+import { Types } from "mongoose";
 import ExpressError from "src/utils/ExpressError";
 
 // create product
-const create = async (store_id: Types.ObjectId, productParams: any) => {
+const create = async (store_id: string, productParams: any) => {
 	const store = await Store.findById(store_id);
 
 	if (!store) {
@@ -13,7 +13,7 @@ const create = async (store_id: Types.ObjectId, productParams: any) => {
 
 	productParams.store_id = store_id;
 
-	// image upload
+	// TODO: image upload
 
 	const product = await Product.create(productParams);
 	await product.save();
@@ -21,7 +21,7 @@ const create = async (store_id: Types.ObjectId, productParams: any) => {
 };
 
 // get product by id
-const getById = async (id: Types.ObjectId) => {
+const getById = async (id: string) => {
 	const product = await Product.findById(id);
 
 	if (!product) {
@@ -32,7 +32,7 @@ const getById = async (id: Types.ObjectId) => {
 };
 
 // get products by store id
-const getProductsByStore = async (store_id: Types.ObjectId) => {
+const getProductsOfStore = async (store_id: string) => {
 	const store = await Store.findById(store_id);
 
 	if (!store) {
@@ -45,8 +45,8 @@ const getProductsByStore = async (store_id: Types.ObjectId) => {
 
 // update product
 const update = async (
-	store_id: Types.ObjectId,
-	product_id: Types.ObjectId,
+	store_id: string,
+	product_id: string,
 	productParams: any
 ) => {
 	const product = await Product.findById(product_id);
@@ -68,10 +68,7 @@ const update = async (
 };
 
 // delete product
-const _delete = async (
-	store_id: Types.ObjectId,
-	product_id: Types.ObjectId
-) => {
+const _delete = async (store_id: string, product_id: string) => {
 	const product = await Product.findById(product_id);
 
 	if (!product) {
@@ -92,7 +89,7 @@ const _delete = async (
 export default {
 	create,
 	getById,
-	getProductsByStore,
+	getProductsOfStore,
 	update,
 	delete: _delete,
 };
