@@ -18,7 +18,7 @@ const reviewSchema = new Schema<IReview>({
 	},
 	rating: { type: Number, required: true },
 	content: { type: String, required: false },
-	created_at: { type: Date, required: true, default: Date.now },
+	created_at: { type: Date, required: true, default: new Date() },
 });
 
 reviewSchema.set("toJSON", {
