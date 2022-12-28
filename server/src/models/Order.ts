@@ -16,7 +16,7 @@ const orderSchema = new Schema<IOrder>({
 	},
 	product_id: { type: Schema.Types.ObjectId, ref: "Product", required: true },
 	user_id: { type: Schema.Types.ObjectId, ref: "User", required: true },
-	createdAt: { type: Date, required: true, default: Date.now },
+	createdAt: { type: Date, required: true, default: new Date() },
 });
 
 orderSchema.set("toJSON", {
