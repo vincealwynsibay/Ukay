@@ -34,7 +34,7 @@ app.post(
 	upload.single("image"),
 	catchAsync(async (req: Request, res: Response) => {
 		console.log("path", req.file?.path);
-		const result = await uploadImage(req.file!.path);
+		const result = await uploadImage(req.file!);
 		console.log(result);
 
 		res.json(result);

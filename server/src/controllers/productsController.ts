@@ -3,6 +3,7 @@ import catchAsync from "../utils/catchAsync";
 import { Request, Response, Router } from "express";
 import productsService from "../services/productsService";
 import { checkRole } from "../utils/jwt";
+import { upload } from "../utils/imageUpload";
 
 export const router = Router({ mergeParams: true });
 
@@ -11,7 +12,7 @@ const createProduct = catchAsync(
 		const product = await productsService.create(
 			req.user.store_id,
 			req.params.id,
-			req.body
+			{ photos: req.files, ...req.body }
 		);
 		return res.json(product);
 	}
@@ -27,7 +28,7 @@ const updateProduct = catchAsync(
 		const product = await productsService.update(
 			req.user.store_id,
 			req.params.id,
-			req.body
+			{ photos: req.files, ...req.body }
 		);
 		return res.json(product);
 	}
@@ -44,13 +45,23 @@ const deleteProduct = catchAsync(
 );
 
 // POST /api/products/
-router.post("/:id", checkRole("store"), createProduct);
+router.post(
+	"/:id",
+	checkRole("store"),
+	upload.array("photos", 5),
+	createProduct
+);
 
 // GET /api/products/:id
 router.get("/:id", getProductById);
 
 // PUT /api/products/:id
-router.put("/:store_id/:id", checkRole("store"), updateProduct);
+router.put(
+	"/:store_id/:id",
+	checkRole("store"),
+	upload.array("photos", 5),
+	updateProduct
+);
 
 // DELETE /api/products/:id
 router.delete("/:store_id/:id", checkRole("store"), deleteProduct);

@@ -1,3 +1,4 @@
+import { upload } from "./../utils/imageUpload";
 import reservationsService from "../services/reservationsService";
 import customersService from "../services/customersService";
 import { IGetAuthRequest } from "../types";
@@ -10,7 +11,10 @@ export const router = Router({ mergeParams: true });
 
 const createCustomerProfile = catchAsync(
 	async (req: IGetAuthRequest, res: Response) => {
-		const profile = await customersService.create(req.user.id, req.body);
+		const profile = await customersService.create(req.user.id, {
+			avatar: req.file,
+			...req.body,
+		});
 		return res.json(profile);
 	}
 );
@@ -27,7 +31,10 @@ const getProfileByUserId = catchAsync(async (req: Request, res: Response) => {
 
 const updateProfile = catchAsync(
 	async (req: IGetAuthRequest, res: Response) => {
-		const profile = await customersService.update(req.user.id, req.body);
+		const profile = await customersService.update(req.user.id, {
+			avatar: req.file,
+			...req.body,
+		});
 		return res.json(profile);
 	}
 );
@@ -49,7 +56,13 @@ const getReservationsByUser = catchAsync(
 );
 
 // POST /api/profile/
-router.post("/", checkAuth, checkRole("customer"), createCustomerProfile);
+router.post(
+	"/",
+	checkAuth,
+	checkRole("customer"),
+	upload.single("avatar"),
+	createCustomerProfile
+);
 
 // GET /api/profile/:id
 router.get("/:id", getProfileByUserId);
@@ -58,7 +71,13 @@ router.get("/:id", getProfileByUserId);
 router.get("/:username", getProfileByUsername);
 
 // PUT /api/profile/:id
-router.put("/:id", checkAuth, checkRole("customer"), updateProfile);
+router.put(
+	"/:id",
+	checkAuth,
+	checkRole("customer"),
+	upload.single("avatar"),
+	updateProfile
+);
 
 // DELETE /api/profile/:id
 router.delete("/:id", checkAuth, checkRole("customer"), deleteProfile);

@@ -5,7 +5,7 @@ interface IStoreProfile {
 	user_id: Types.ObjectId;
 	description: string;
 	name: string;
-	avatarUrl: string;
+	avatar: string;
 	followers: Types.ObjectId[];
 	reviews: Types.ObjectId[];
 	createdAt: Date;
@@ -14,7 +14,7 @@ interface IStoreProfile {
 const storeProfileSchema = new Schema<IStoreProfile>({
 	name: { type: String, required: true },
 	user_id: { type: Schema.Types.ObjectId, ref: "User", required: true },
-	avatarUrl: {
+	avatar: {
 		type: String,
 		required: true,
 		default: "https://i.imgur.com/1Q9ZQ9r.png",

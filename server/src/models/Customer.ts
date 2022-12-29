@@ -4,7 +4,7 @@ interface ICustomer {
 	_id: Types.ObjectId;
 	user_id: Types.ObjectId;
 	username: string;
-	avatarUrl: string;
+	avatar: string;
 	description: string;
 	following: Types.ObjectId[];
 	reservations: Types.ObjectId[];
@@ -13,7 +13,7 @@ interface ICustomer {
 const customerSchema = new Schema<ICustomer>({
 	user_id: { type: Schema.Types.ObjectId, ref: "User", required: true },
 	username: { type: String, required: true, unique: true },
-	avatarUrl: {
+	avatar: {
 		type: String,
 		required: true,
 		default: "https://i.imgur.com/1Q9ZQ9r.png",

@@ -7,11 +7,15 @@ import reviewsServices from "../services/reviewsService";
 import { checkAuth, checkRole } from "../utils/jwt";
 import ordersService from "../services/ordersService";
 import productsService from "../services/productsService";
+import { upload } from "../utils/imageUpload";
 
 export const router = Router({ mergeParams: true });
 
 const createStore = catchAsync(async (req: IGetAuthRequest, res: Response) => {
-	const store = await storesService.create(req.user.id, req.body);
+	const store = await storesService.create(req.user.id, {
+		avatar: req.file,
+		...req.body,
+	});
 	return res.json(store);
 });
 
@@ -41,11 +45,10 @@ const toggleFollowStore = catchAsync(
 );
 
 const updateStore = catchAsync(async (req: IGetAuthRequest, res: Response) => {
-	const store = await storesService.update(
-		req.user.id,
-		req.params.id,
-		req.body
-	);
+	const store = await storesService.update(req.user.id, req.params.id, {
+		avatar: req.file,
+		...req.body,
+	});
 	return res.json(store);
 });
 
@@ -77,31 +80,53 @@ const getOrdersByStore = catchAsync(
 );
 
 // POST /api/stores/
-router.post("/", checkAuth, checkRole("store"), createStore);
+// create store
+router.post(
+	"/",
+	checkAuth,
+	checkRole("store"),
+	upload.single("avatar"),
+	createStore
+);
 
 // GET /api/stores/:id
+// get store by id
 router.get("/:id", getStoreById);
 
 // GET /api/stores/:name
+// get store by name
 router.get("/:name", getStoreByName);
 
 // GET /api/stores/
+// get all stores
 router.get("/", getAllStores);
 
 // PUT /api/stores/:id/follow
+// follow a store
 router.put("/:id/follow", checkRole("customer"), checkAuth, toggleFollowStore);
 
 // PUT /api/stores/:id
-router.put("/:id", checkAuth, checkRole("store"), updateStore);
+// update store
+router.put(
+	"/:id",
+	checkAuth,
+	checkRole("store"),
+	upload.single("avatar"),
+	updateStore
+);
 
 // DELETE /api/stores/:id
+// delete store
 router.delete("/:id", checkAuth, checkRole("store"), deleteStore);
 
 // GET /api/stores/:id/products/
+// get products of store
 router.get("/:id", getProductsOfStore);
 
 // POST /api/stores/:id/reviews
+// create review
 router.post("/:id/reviews", checkAuth, checkRole("customer"), createReview);
 
 // GET /api/store/:id/orders
+// get orders of store
 router.get("/store/:id/orders", getOrdersByStore);

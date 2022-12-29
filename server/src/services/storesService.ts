@@ -2,6 +2,7 @@ import User from "../models/User";
 import { Types } from "mongoose";
 import ExpressError from "../utils/ExpressError";
 import Store from "../models/Store";
+import { uploadImage } from "../utils/imageUpload";
 
 // create store
 const create = async (user_id: Types.ObjectId, storeParams: any) => {
@@ -11,6 +12,7 @@ const create = async (user_id: Types.ObjectId, storeParams: any) => {
 		throw new ExpressError("Store name " + name + " is already taken", 400);
 	}
 
+	storeParams.avatar = await uploadImage(storeParams.avatar);
 	storeParams.userId = user_id;
 
 	const store = new Store(storeParams);
@@ -88,6 +90,10 @@ const update = async (
 		}
 	}
 
+	if (storeParams.avatar) {
+		storeParams.avatar = await uploadImage(storeParams.avatar);
+	}
+
 	Object.assign(store, storeParams);
 	await store.save();
 	return store;
@@ -113,9 +119,6 @@ const _delete = async (user_id: Types.ObjectId, store_id: string) => {
 	return;
 };
 
-// change avatar of store
-const changeAvatar = async () => {};
-
 export default {
 	create,
 	getById,
@@ -124,5 +127,4 @@ export default {
 	toggleFollow,
 	update,
 	delete: _delete,
-	changeAvatar,
 };

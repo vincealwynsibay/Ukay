@@ -2,6 +2,7 @@ import { Types } from "mongoose";
 import ExpressError from "../utils/ExpressError";
 import Customer from "../models/Customer";
 import User from "../models/User";
+import { uploadImage } from "../utils/imageUpload";
 
 // create
 const create = async (user_id: Types.ObjectId, customerParams: any) => {
@@ -10,7 +11,9 @@ const create = async (user_id: Types.ObjectId, customerParams: any) => {
 		throw new ExpressError(`Username ${username} is already taken`, 400);
 	}
 
+	customerParams.avatar = await uploadImage(customerParams.avatar);
 	customerParams.user_id = user_id;
+
 	const customer = new Customer(customerParams);
 	await customer.save();
 	return customer;
@@ -35,27 +38,27 @@ const getByUserId = async (userId: string) => {
 };
 
 // update by user_id
-const update = async (id: Types.ObjectId, customerCredentials: any) => {
+const update = async (id: Types.ObjectId, customerParams: any) => {
 	const customer = await Customer.findById(id);
 
 	if (!customer) {
 		throw new ExpressError(`Customer ${id} not found`, 404);
 	}
 
-	if (customer.username !== customerCredentials.username) {
-		if (
-			await Customer.findOne({ username: customerCredentials.username })
-		) {
+	if (customer.username !== customerParams.username) {
+		if (await Customer.findOne({ username: customerParams.username })) {
 			throw new ExpressError(
-				"Username " +
-					customerCredentials.username +
-					" is already taken",
+				"Username " + customerParams.username + " is already taken",
 				400
 			);
 		}
 	}
 
-	Object.assign(customer, customerCredentials);
+	if (customerParams.avatar) {
+		customerParams.avatar = await uploadImage(customerParams.avatar);
+	}
+
+	Object.assign(customer, customerParams);
 	await customer.save();
 	return customer;
 };
@@ -80,11 +83,6 @@ const _delete = async (user_id: Types.ObjectId, id: string) => {
 	return;
 };
 
-// change avatar of customer
-const changeAvatar = async () => {};
-
-// reserve a product
-
 export default {
 	create,
 	getById,
@@ -92,5 +90,4 @@ export default {
 	getByUserId,
 	update,
 	delete: _delete,
-	changeAvatar,
 };

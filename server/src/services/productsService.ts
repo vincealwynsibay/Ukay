@@ -2,7 +2,7 @@ import Store from "../models/Store";
 import Product from "../models/Product";
 import { Types } from "mongoose";
 import ExpressError from "../utils/ExpressError";
-import { uploadImages } from "src/utils/imageUpload";
+import { uploadImages } from "../utils/imageUpload";
 
 // create product
 const create = async (store_id: string, id: string, productParams: any) => {
@@ -84,6 +84,26 @@ const update = async (
 			`Lacking Credentials to update ${product_id}`,
 			401
 		);
+	}
+
+	if (productParams.photos) {
+		const photos = await uploadImages(productParams.photos);
+
+		productParams.photos = {
+			main: "",
+			front: "",
+			back: "",
+			leftSide: "",
+			rightSide: "",
+		};
+
+		for (let i = 0; i < photos.length; i++) {
+			// get key of object
+			const key = Object.keys(productParams.photos)[i];
+
+			// assign value to photos key
+			productParams.photos[key] = photos[i];
+		}
 	}
 
 	Object.assign(product, productParams);
