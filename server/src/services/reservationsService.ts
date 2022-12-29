@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
-import Product from "../models/Product";
-import Reservation from "../models/Reservation";
+import Product from "../models/productModel";
+import Reservation from "../models/reservationModel";
 import ExpressError from "../utils/ExpressError";
 
 // create reservation

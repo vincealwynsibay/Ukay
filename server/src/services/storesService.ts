@@ -1,7 +1,7 @@
-import User from "../models/User";
+import User from "../models/userModel";
 import { Types } from "mongoose";
 import ExpressError from "../utils/ExpressError";
-import Store from "../models/Store";
+import Store from "../models/storeModel";
 import { uploadImage } from "../utils/imageUpload";
 
 // create store

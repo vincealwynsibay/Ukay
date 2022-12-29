@@ -1,6 +1,6 @@
-import Reservation from "../models/Reservation";
-import Product from "../models/Product";
-import Order from "../models/Order";
+import Reservation from "../models/reservationModel";
+import Product from "../models/productModel";
+import Order from "../models/orderModel";
 import { Types } from "mongoose";
 
 // create order

@@ -1,5 +1,5 @@
-import Store from "../models/Store";
-import Product from "../models/Product";
+import Store from "../models/storeModel";
+import Product from "../models/productModel";
 import { Types } from "mongoose";
 import ExpressError from "../utils/ExpressError";
 import { uploadImages } from "../utils/imageUpload";

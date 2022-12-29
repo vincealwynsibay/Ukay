@@ -5,7 +5,6 @@ import bodyParser from "body-parser";
 import "dotenv/config";
 import morgan from "morgan";
 import cors from "cors";
-import { connectDB } from "./utils/db";
 
 // app routes
 import { router as authRoutes } from "./controllers/authController";
@@ -22,8 +21,6 @@ const app = express();
 app.use(morgan("common"));
 app.use(cors());
 app.use(bodyParser.json());
-
-connectDB();
 
 app.get("/ping", (_req, res) => {
 	res.send("nice");

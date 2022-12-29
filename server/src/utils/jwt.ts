@@ -2,9 +2,9 @@ import catchAsync from "../utils/catchAsync";
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 import ExpressError from "./ExpressError";
-import User from "../models/User";
-import Store from "../models/Store";
-import Customer from "../models/Customer";
+import User from "../models/userModel";
+import Store from "../models/storeModel";
+import Customer from "../models/customerModel";
 
 export const checkAuth = catchAsync(
 	async (req: Request, res: Response, next: NextFunction) => {

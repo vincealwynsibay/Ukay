@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 import ExpressError from "../utils/ExpressError";
-import User from "../models/User";
+import User from "../models/userModel";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -14,7 +14,7 @@ const authenticate = async (userCredentials: any) => {
 
 	const isValid = await bcrypt.compare(password, user.password);
 
-	if (isValid) {
+	if (!isValid) {
 		throw new ExpressError("Invalid password", 400);
 	}
 
@@ -27,14 +27,9 @@ const authenticate = async (userCredentials: any) => {
 
 // register user
 const register = async (userCredentials: any) => {
-	const { username, email, password } = userCredentials;
-	if (await User.findOne({ username }))
-		throw new ExpressError(
-			"Username " + username + " is already taken",
-			400
-		);
+	const { email, password } = userCredentials;
 	if (await User.findOne({ email }))
-		throw new ExpressError("Email " + email + " is already taken", 400);
+		throw new ExpressError("Email " + email + " is already taken", 401);
 
 	const passwordHash = await bcrypt.hash(password, 10);
 

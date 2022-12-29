@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 import ExpressError from "../utils/ExpressError";
-import Customer from "../models/Customer";
-import User from "../models/User";
+import Customer from "../models/customerModel";
+import User from "../models/userModel";
 import { uploadImage } from "../utils/imageUpload";
 
 // create

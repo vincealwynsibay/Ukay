@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
-import Order from "../models/Order";
-import Review from "../models/Review";
-import Store from "../models/Store";
+import Order from "../models/orderModel";
+import Review from "../models/reviewModel";
+import Store from "../models/storeModel";
 import ExpressError from "../utils/ExpressError";
 
 // create review of store if already has an order from store
