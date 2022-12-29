@@ -1,7 +1,6 @@
-import mongoose, { Schema, model, Types } from "mongoose";
+import { Schema, model, Types } from "mongoose";
 
 interface IUser {
-	_id: Types.ObjectId;
 	email: string;
 	password: string;
 	firstName: string;
@@ -12,12 +11,12 @@ interface IUser {
 }
 
 const userSchema = new Schema<IUser>({
-	email: { type: String, required: true, unique: true },
+	email: { type: String, required: true },
 	password: { type: String, required: true },
 	firstName: { type: String, required: true },
 	middleName: { type: String },
 	lastName: { type: String, required: true },
-	role: { Type: String, required: true, default: "customer" },
+	role: { type: String, required: true, default: "customer" },
 	createdAt: { type: Date, required: true, default: new Date() },
 });
 
@@ -34,6 +33,6 @@ userSchema.set("toJSON", {
 	},
 });
 
-const userModel = model("User", userSchema);
+const userModel = model<IUser>("User", userSchema);
 
 export default userModel;

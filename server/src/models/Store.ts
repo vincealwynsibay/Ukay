@@ -33,6 +33,6 @@ storeProfileSchema.set("toJSON", {
 	},
 });
 
-const storeProfileModel = model("StoreProfile", storeProfileSchema);
+const storeProfileModel = model("Store", storeProfileSchema);
 
 export default storeProfileModel;

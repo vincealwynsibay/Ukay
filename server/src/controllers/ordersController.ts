@@ -2,9 +2,9 @@ import { IGetAuthRequest } from "../types";
 import catchAsync from "../utils/catchAsync";
 import { Request, Response, Router } from "express";
 import ordersService from "../services/ordersService";
-import { checkRole } from "src/utils/jwt";
+import { checkRole } from "../utils/jwt";
 
-const router = Router();
+export const router = Router({ mergeParams: true });
 
 const createOrder = catchAsync(async (req: IGetAuthRequest, res: Response) => {
 	const order = await ordersService.create(req.user.id, req.body.id);
@@ -34,5 +34,3 @@ router.post("/user/:id/orders", checkRole("customer"), createOrders);
 
 // GET /api/users/:id/orders
 router.get("/user/:id/orders", checkRole("customer"), getOrdersByUser);
-
-export default router;

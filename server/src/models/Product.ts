@@ -17,11 +17,11 @@ interface IProduct {
 }
 
 const productSchema = new Schema<IProduct>({
-	store_id: { type: Schema.Types.ObjectId, ref: "StoreProfile" },
+	store_id: { type: Schema.Types.ObjectId, ref: "Store" },
 	name: { type: String, required: true },
 	price: { type: Number, required: true },
 	category: { type: String, required: true },
-	queueList: [{ type: Schema.Types.ObjectId, ref: "UserProfile" }],
+	queueList: [{ type: Schema.Types.ObjectId, ref: "Reservation" }],
 	photos: {
 		main: { type: String, required: true },
 		front: { type: String, required: true },
@@ -36,10 +36,9 @@ productSchema.set("toJSON", {
 	versionKey: false,
 	transform: function (_doc, ret) {
 		delete ret._id;
-		delete ret.password;
 	},
 });
 
-const productModel = model("User", productSchema);
+const productModel = model("Product", productSchema);
 
 export default productModel;

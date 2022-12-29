@@ -6,9 +6,9 @@ import { Request, Response, Router } from "express";
 import reviewsServices from "../services/reviewsService";
 import { checkAuth, checkRole } from "../utils/jwt";
 import ordersService from "../services/ordersService";
-import productsService from "src/services/productsService";
+import productsService from "../services/productsService";
 
-const router = Router();
+export const router = Router({ mergeParams: true });
 
 const createStore = catchAsync(async (req: IGetAuthRequest, res: Response) => {
 	const store = await storesService.create(req.user.id, req.body);
@@ -105,5 +105,3 @@ router.post("/:id/reviews", checkAuth, checkRole("customer"), createReview);
 
 // GET /api/store/:id/orders
 router.get("/store/:id/orders", getOrdersByStore);
-
-export default router;

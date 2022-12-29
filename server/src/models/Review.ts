@@ -13,7 +13,7 @@ const reviewSchema = new Schema<IReview>({
 	user_id: { type: Schema.Types.ObjectId, ref: "User", required: true },
 	store_id: {
 		type: Schema.Types.ObjectId,
-		ref: "StoreProfile",
+		ref: "Stor",
 		required: true,
 	},
 	rating: { type: Number, required: true },

@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 import ExpressError from "../utils/ExpressError";
 import Customer from "../models/Customer";
-import User from "src/models/User";
+import User from "../models/User";
 
 // create
 const create = async (user_id: Types.ObjectId, customerParams: any) => {

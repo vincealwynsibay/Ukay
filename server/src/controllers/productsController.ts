@@ -2,9 +2,9 @@ import { IGetAuthRequest } from "./../types";
 import catchAsync from "../utils/catchAsync";
 import { Request, Response, Router } from "express";
 import productsService from "../services/productsService";
-import { checkRole } from "src/utils/jwt";
+import { checkRole } from "../utils/jwt";
 
-const router = Router();
+export const router = Router({ mergeParams: true });
 
 const createProduct = catchAsync(
 	async (req: IGetAuthRequest, res: Response) => {
@@ -56,5 +56,3 @@ router.put("/:store_id/:id", checkRole("store"), updateProduct);
 
 // DELETE /api/products/:id
 router.delete("/:store_id/:id", checkRole("store"), deleteProduct);
-
-export default router;

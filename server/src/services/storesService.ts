@@ -1,4 +1,4 @@
-import User from "src/models/User";
+import User from "../models/User";
 import { Types } from "mongoose";
 import ExpressError from "../utils/ExpressError";
 import Store from "../models/Store";

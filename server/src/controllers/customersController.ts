@@ -3,10 +3,10 @@ import customersService from "../services/customersService";
 import { IGetAuthRequest } from "../types";
 import { Request, Response } from "express";
 import catchAsync from "../utils/catchAsync";
-import express from "express";
+import express, { Router } from "express";
 import { checkAuth, checkRole } from "../utils/jwt";
 
-const router = express.Router();
+export const router = Router({ mergeParams: true });
 
 const createCustomerProfile = catchAsync(
 	async (req: IGetAuthRequest, res: Response) => {
@@ -69,5 +69,3 @@ router.get(
 	checkRole("customer"),
 	getReservationsByUser
 );
-
-export default router;

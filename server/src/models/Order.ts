@@ -11,7 +11,7 @@ interface IOrder {
 const orderSchema = new Schema<IOrder>({
 	store_id: {
 		type: Schema.Types.ObjectId,
-		ref: "StoreProfile",
+		ref: "Store",
 		required: true,
 	},
 	product_id: { type: Schema.Types.ObjectId, ref: "Product", required: true },

@@ -2,9 +2,9 @@ import reservationsService from "../services/reservationsService";
 import { IGetAuthRequest } from "../types";
 import catchAsync from "../utils/catchAsync";
 import { Request, Response, Router } from "express";
-import { checkRole } from "src/utils/jwt";
+import { checkRole } from "../utils/jwt";
 
-const router = Router();
+export const router = Router({ mergeParams: true });
 
 const createReservation = catchAsync(
 	async (req: IGetAuthRequest, res: Response) => {
@@ -46,7 +46,5 @@ router.get("/:id/reservations", getReservationsByProduct);
 // DELETE /api/products/:product_id/reservations/:id
 router.delete("/reservations", checkRole("customer"), deleteReservations);
 
-// GET /api/products/:id/queue
-router.get("/:id/queue", getProductQueueList);
-
-export default router;
+// GET /api/products/:id/reservations/queue
+router.get("/:id/reservations/queue", getProductQueueList);

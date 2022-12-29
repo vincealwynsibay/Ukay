@@ -1,9 +1,9 @@
-import express from "express";
+import express, { Router } from "express";
 import usersService from "../services/usersService";
 import catchAsync from "../utils/catchAsync";
 import { checkAuth } from "../utils/jwt";
 import { IGetAuthRequest } from "../types";
-const router = express.Router();
+export const router = Router({ mergeParams: true });
 
 const getUserById = catchAsync(
 	async (req: express.Request, res: express.Response) => {
