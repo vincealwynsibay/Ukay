@@ -1,4 +1,6 @@
-import express from "express";
+import { v2 as cloudinary } from "cloudinary";
+import catchAsync from "./utils/catchAsync";
+import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import "dotenv/config";
 import morgan from "morgan";
@@ -13,6 +15,7 @@ import { router as storesRoutes } from "./controllers/storesController";
 import { router as productsRoutes } from "./controllers/productsController";
 import { router as reservationsRoutes } from "./controllers/reservationsController";
 import { router as ordersRoutes } from "./controllers/ordersController";
+import { upload, uploadImage, uploadImages } from "./utils/imageUpload";
 
 const app = express();
 
@@ -26,13 +29,26 @@ app.get("/ping", (_req, res) => {
 	res.send("nice");
 });
 
-import multer from "multer";
+app.post(
+	"/uploadImage",
+	upload.single("image"),
+	catchAsync(async (req: Request, res: Response) => {
+		console.log("path", req.file?.path);
+		const result = await uploadImage(req.file!.path);
+		console.log(result);
 
-const upload = multer({ dest: "uploads/" });
+		res.json(result);
+	})
+);
 
-app.get("/upload", upload.single("image"), (_req, res) => {
-	res.send("upload");
-});
+app.post(
+	"/uploadImages",
+	upload.array("image", 5),
+	catchAsync(async (req: Request, res: Response) => {
+		const results = await uploadImages(req.files);
+		res.json({ results });
+	})
+);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", usersRoutes);

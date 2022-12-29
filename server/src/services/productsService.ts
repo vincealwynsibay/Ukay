@@ -2,6 +2,7 @@ import Store from "../models/Store";
 import Product from "../models/Product";
 import { Types } from "mongoose";
 import ExpressError from "../utils/ExpressError";
+import { uploadImages } from "src/utils/imageUpload";
 
 // create product
 const create = async (store_id: string, id: string, productParams: any) => {
@@ -20,7 +21,23 @@ const create = async (store_id: string, id: string, productParams: any) => {
 
 	productParams.store_id = id;
 
-	// TODO: image upload
+	const photos = await uploadImages(productParams.photos);
+
+	productParams.photos = {
+		main: "",
+		front: "",
+		back: "",
+		leftSide: "",
+		rightSide: "",
+	};
+
+	for (let i = 0; i < photos.length; i++) {
+		// get key of object
+		const key = Object.keys(productParams.photos)[i];
+
+		// assign value to photos key
+		productParams.photos[key] = photos[i];
+	}
 
 	const product = await Product.create(productParams);
 	await product.save();

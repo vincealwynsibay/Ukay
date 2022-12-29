@@ -8,7 +8,6 @@ export const router = Router({ mergeParams: true });
 
 const createProduct = catchAsync(
 	async (req: IGetAuthRequest, res: Response) => {
-		// TODO: USER VALIDATION
 		const product = await productsService.create(
 			req.user.store_id,
 			req.params.id,
@@ -36,7 +35,6 @@ const updateProduct = catchAsync(
 
 const deleteProduct = catchAsync(
 	async (req: IGetAuthRequest, res: Response) => {
-		// TODO: USER VALIDATION
 		const product = await productsService.delete(
 			req.user.store_id,
 			req.params.id
