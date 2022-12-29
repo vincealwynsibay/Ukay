@@ -26,6 +26,24 @@ const createOrders = async (
 	products: Types.ObjectId[]
 ) => {
 	const orders = [];
+	// products.forEach(async (productId) => {
+	// 	const product = await Product.findById(productId);
+	// 	if (!product) throw new Error("Product not found");
+
+	// 	const order = new Order({
+	// 		store_id: product.store_id,
+	// 		product_id: productId,
+	// 		user_id,
+	// 	});
+
+	// 	await order.save();
+
+	// 	// delete product and reservations after order has been created
+	// 	await Product.deleteOne({ _id: productId });
+	// 	await Reservation.deleteMany({ product_id: productId });
+
+	// 	orders.push(order);
+	// });
 	for (let i = 0; i < products.length; i++) {
 		const product = await Product.findById(products[i]);
 		if (!product) throw new Error("Product not found");

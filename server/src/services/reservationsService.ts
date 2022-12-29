@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
-import Product from "src/models/Product";
-import Reservation from "src/models/Reservation";
-import ExpressError from "src/utils/ExpressError";
+import Product from "../models/Product";
+import Reservation from "../models/Reservation";
+import ExpressError from "../utils/ExpressError";
 
 // create reservation
 const create = async (user_id: Types.ObjectId, product_id: string) => {
@@ -47,6 +47,10 @@ const deleteById = async (user_id: Types.ObjectId, id: Types.ObjectId) => {
 	}
 
 	await Reservation.deleteOne(id);
+	await Product.updateOne(
+		{ id: reservation.product_id },
+		{ $pull: { queueList: id } }
+	);
 	return;
 };
 

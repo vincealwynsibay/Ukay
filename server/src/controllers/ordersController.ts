@@ -1,7 +1,8 @@
-import { IGetAuthRequest } from "src/types";
-import catchAsync from "src/utils/catchAsync";
+import { IGetAuthRequest } from "../types";
+import catchAsync from "../utils/catchAsync";
 import { Request, Response, Router } from "express";
-import ordersService from "src/services/ordersService";
+import ordersService from "../services/ordersService";
+import { checkRole } from "src/utils/jwt";
 
 const router = Router();
 
@@ -25,20 +26,13 @@ const getOrdersByUser = catchAsync(
 	}
 );
 
-const getOrdersByStore = catchAsync(
-	async (req: IGetAuthRequest, res: Response) => {
-		const orders = await ordersService.getOrdersByStore(req.params.id);
-		return res.json(orders);
-	}
-);
+// POST /api/users/:id/order
+router.post("/user/:id/order", checkRole("customer"), createOrder);
 
-// POST /api/user/:id/order
-router.post("/user/:id/order", createOrder);
-// POST /api/user/:id/orders
-router.post("/user/:id/orders", createOrders);
-// GET /api/user/:id/orders
-router.get("/user/:id/orders", getOrdersByUser);
-// GET /api/store/:id/orders
-router.get("/store/:id/orders", getOrdersByStore);
+// POST /api/users/:id/orders
+router.post("/user/:id/orders", checkRole("customer"), createOrders);
+
+// GET /api/users/:id/orders
+router.get("/user/:id/orders", checkRole("customer"), getOrdersByUser);
 
 export default router;

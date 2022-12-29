@@ -1,6 +1,7 @@
 import { Types } from "mongoose";
-import ExpressError from "src/utils/ExpressError";
+import ExpressError from "../utils/ExpressError";
 import Customer from "../models/Customer";
+import User from "src/models/User";
 
 // create
 const create = async (user_id: Types.ObjectId, customerParams: any) => {
@@ -75,6 +76,7 @@ const _delete = async (user_id: Types.ObjectId, id: string) => {
 	}
 
 	await Customer.deleteOne({ id });
+	await User.deleteOne({ id: user_id });
 	return;
 };
 

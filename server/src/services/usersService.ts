@@ -49,7 +49,7 @@ const register = async (userCredentials: any) => {
 };
 
 // get user by id
-const getById = async (id: Types.ObjectId) => {
+const getById = async (id: string) => {
 	const user = await User.findById(id);
 	return user;
 };

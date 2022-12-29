@@ -1,8 +1,10 @@
+import reservationsService from "../services/reservationsService";
 import customersService from "../services/customersService";
-import { IGetAuthRequest } from "src/types";
+import { IGetAuthRequest } from "../types";
 import { Request, Response } from "express";
-import catchAsync from "src/utils/catchAsync";
+import catchAsync from "../utils/catchAsync";
 import express from "express";
+import { checkAuth, checkRole } from "../utils/jwt";
 
 const router = express.Router();
 
@@ -14,7 +16,7 @@ const createCustomerProfile = catchAsync(
 );
 
 const getProfileByUsername = catchAsync(async (req: Request, res: Response) => {
-	const profile = await customersService.getByUsername(req.body.username);
+	const profile = await customersService.getByUsername(req.params.username);
 	return res.json(profile);
 });
 
@@ -37,8 +39,17 @@ const deleteProfile = catchAsync(
 	}
 );
 
+const getReservationsByUser = catchAsync(
+	async (req: IGetAuthRequest, res: Response) => {
+		const reservations = await reservationsService.getReservationsByUser(
+			req.user.id
+		);
+		return res.json(reservations);
+	}
+);
+
 // POST /api/profile/
-router.post("/", createCustomerProfile);
+router.post("/", checkAuth, checkRole("customer"), createCustomerProfile);
 
 // GET /api/profile/:id
 router.get("/:id", getProfileByUserId);
@@ -47,9 +58,16 @@ router.get("/:id", getProfileByUserId);
 router.get("/:username", getProfileByUsername);
 
 // PUT /api/profile/:id
-router.put("/:id", updateProfile);
+router.put("/:id", checkAuth, checkRole("customer"), updateProfile);
 
 // DELETE /api/profile/:id
-router.delete("/:id", deleteProfile);
+router.delete("/:id", checkAuth, checkRole("customer"), deleteProfile);
+
+// GET /api/users/:id/reservations
+router.get(
+	"/user/:id/reservations",
+	checkRole("customer"),
+	getReservationsByUser
+);
 
 export default router;

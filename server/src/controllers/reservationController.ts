@@ -1,7 +1,8 @@
-import reservationsService from "src/services/reservationsService";
-import { IGetAuthRequest } from "src/types";
-import catchAsync from "src/utils/catchAsync";
+import reservationsService from "../services/reservationsService";
+import { IGetAuthRequest } from "../types";
+import catchAsync from "../utils/catchAsync";
 import { Request, Response, Router } from "express";
+import { checkRole } from "src/utils/jwt";
 
 const router = Router();
 
@@ -12,14 +13,6 @@ const createReservation = catchAsync(
 			req.params.id
 		);
 		return res.json(reservation);
-	}
-);
-const getReservationsByUser = catchAsync(
-	async (req: IGetAuthRequest, res: Response) => {
-		const reservations = await reservationsService.getReservationsByUser(
-			req.user.id
-		);
-		return res.json(reservations);
 	}
 );
 
@@ -39,21 +32,20 @@ const deleteReservations = catchAsync(
 	}
 );
 
-const getProductQueueList = catchAsync(
-	async (req: IGetAuthRequest, res: Response) => {
-		const queueList = await reservationsService.getQueueList(req.params.id);
-		return res.json(queueList);
-	}
-);
+const getProductQueueList = catchAsync(async (req: Request, res: Response) => {
+	const queueList = await reservationsService.getQueueList(req.params.id);
+	return res.json(queueList);
+});
 
 // POST /api/products/:id/reservations
-router.post("/:id/reservations", createReservation);
-// GET /api/user/:id/reservations
-router.get("/user/:id/reservations", getReservationsByUser);
+router.post("/:id/reservations", checkRole("customer"), createReservation);
+
 // GET /api/products/:id/reservations
 router.get("/:id/reservations", getReservationsByProduct);
-// DELETE /api/reservations/:id
-router.delete("/reservations", deleteReservations);
+
+// DELETE /api/products/:product_id/reservations/:id
+router.delete("/reservations", checkRole("customer"), deleteReservations);
+
 // GET /api/products/:id/queue
 router.get("/:id/queue", getProductQueueList);
 

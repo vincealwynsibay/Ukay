@@ -1,9 +1,12 @@
-import { IGetAuthRequest } from "src/types";
-import catchAsync from "src/utils/catchAsync";
-import storesService from "src/services/storesService";
-import reviewsService from "src/services/reviewsService";
+import { IGetAuthRequest } from "../types";
+import catchAsync from "../utils/catchAsync";
+import storesService from "../services/storesService";
+import reviewsService from "../services/reviewsService";
 import { Request, Response, Router } from "express";
-import reviewsServices from "src/services/reviewsService";
+import reviewsServices from "../services/reviewsService";
+import { checkAuth, checkRole } from "../utils/jwt";
+import ordersService from "../services/ordersService";
+import productsService from "src/services/productsService";
 
 const router = Router();
 
@@ -51,6 +54,11 @@ const deleteStore = catchAsync(async (req: IGetAuthRequest, res: Response) => {
 	return res.json(store);
 });
 
+const getProductsOfStore = catchAsync(async (req: Request, res: Response) => {
+	const products = await productsService.getProductsOfStore(req.params.id);
+	return res.json(products);
+});
+
 const createReview = catchAsync(async (req: IGetAuthRequest, res: Response) => {
 	const review = await reviewsServices.createReview(
 		req.user.id,
@@ -61,8 +69,15 @@ const createReview = catchAsync(async (req: IGetAuthRequest, res: Response) => {
 	return res.json(review);
 });
 
+const getOrdersByStore = catchAsync(
+	async (req: IGetAuthRequest, res: Response) => {
+		const orders = await ordersService.getOrdersByStore(req.params.id);
+		return res.json(orders);
+	}
+);
+
 // POST /api/stores/
-router.post("/", createStore);
+router.post("/", checkAuth, checkRole("store"), createStore);
 
 // GET /api/stores/:id
 router.get("/:id", getStoreById);
@@ -73,16 +88,22 @@ router.get("/:name", getStoreByName);
 // GET /api/stores/
 router.get("/", getAllStores);
 
-// UPDATE /api/stores/:id/follow
-router.put("/:id/follow", toggleFollowStore);
+// PUT /api/stores/:id/follow
+router.put("/:id/follow", checkRole("customer"), checkAuth, toggleFollowStore);
 
-// UPDATE /api/stores/:id
-router.put("/:id", updateStore);
+// PUT /api/stores/:id
+router.put("/:id", checkAuth, checkRole("store"), updateStore);
 
 // DELETE /api/stores/:id
-router.delete("/:id", deleteStore);
+router.delete("/:id", checkAuth, checkRole("store"), deleteStore);
+
+// GET /api/stores/:id/products/
+router.get("/:id", getProductsOfStore);
 
 // POST /api/stores/:id/reviews
-router.post("/:id/reviews", createReview);
+router.post("/:id/reviews", checkAuth, checkRole("customer"), createReview);
+
+// GET /api/store/:id/orders
+router.get("/store/:id/orders", getOrdersByStore);
 
 export default router;

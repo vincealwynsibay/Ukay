@@ -1,17 +1,24 @@
 import Store from "../models/Store";
 import Product from "../models/product";
 import { Types } from "mongoose";
-import ExpressError from "src/utils/ExpressError";
+import ExpressError from "../utils/ExpressError";
 
 // create product
-const create = async (store_id: string, productParams: any) => {
+const create = async (store_id: string, id: string, productParams: any) => {
 	const store = await Store.findById(store_id);
 
 	if (!store) {
 		throw new ExpressError(`Store ${store_id} not found`, 404);
 	}
 
-	productParams.store_id = store_id;
+	if (store_id.toString() !== id.toString()) {
+		throw new ExpressError(
+			`User lacks authority to add a product on store ${store.id}`,
+			401
+		);
+	}
+
+	productParams.store_id = id;
 
 	// TODO: image upload
 
