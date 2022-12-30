@@ -14,7 +14,7 @@ const getUserById = catchAsync(
 
 const getAll = catchAsync(
 	async (req: express.Request, res: express.Response) => {
-		const users = await usersService.register(req.body);
+		const users = await usersService.getAll();
 		return res.json(users);
 	}
 );
@@ -28,23 +28,25 @@ const getUserByEmail = catchAsync(
 
 const updateUser = catchAsync(
 	async (req: IGetAuthRequest, res: express.Response) => {
-		const user = await usersService.update(req.user.id, req.body);
+		const user = await usersService.update(req.params.id, req.body);
+		console.log("user", user);
+
 		return res.json(user);
 	}
 );
 
 const deleteUser = catchAsync(
 	async (req: IGetAuthRequest, res: express.Response) => {
-		const user = await usersService.delete(req.user.id);
+		// const user = await usersService.delete(req.user.id, req.params.id);
+		const user = await usersService.delete(req.params.id);
 		return res.json(user);
 	}
 );
+// GET /api/users/
+router.get("/", getAll);
 
 // GET /api/users/:id
 router.get("/:id", getUserById);
-
-// GET /api/users/
-router.get("/", getAll);
 
 // PUT: /api/users/:id
 router.put("/:id", checkAuth, updateUser);

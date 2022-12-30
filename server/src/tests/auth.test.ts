@@ -7,7 +7,7 @@ import User from "../models/userModel";
 describe("Authentication", () => {
 	// clean mongoose database before all tests
 	beforeEach(async () => {
-		await mongoose.connect(process.env.MONGO_URI!);
+		await mongoose.connect(process.env.MONGO_URI_TEST!);
 	});
 
 	afterAll(async () => {

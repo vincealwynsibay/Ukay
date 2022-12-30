@@ -62,7 +62,7 @@ const getByEmail = async (email: string) => {
 };
 
 // update user
-const update = async (id: Types.ObjectId, userCredentials: any) => {
+const update = async (id: string, userCredentials: any) => {
 	const user = await User.findById(id);
 
 	if (!user) {
@@ -71,12 +71,12 @@ const update = async (id: Types.ObjectId, userCredentials: any) => {
 
 	Object.assign(user, userCredentials);
 
-	await user.save();
-	return user;
+	const savedUser = await user.save();
+	return savedUser;
 };
 
 // delete user
-const _delete = async (id: Types.ObjectId) => {
+const _delete = async (id: string) => {
 	await User.findByIdAndDelete(id);
 	return;
 };

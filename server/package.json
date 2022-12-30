@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"test": "jest",
+		"test": "jest --silent=false --verbose false",
 		"dev": "concurrently \"tsc -w\" \"nodemon ./dist/server.js\""
 	},
 	"keywords": [],
