@@ -43,6 +43,10 @@ const register = async (userCredentials: any) => {
 	return user;
 };
 
+// TODO: Authenticate Thru Google
+// TODO: Implement Forgot Password
+// TODO: Implement Email Verification
+
 // get user by id
 const getById = async (id: string) => {
 	const user = await User.findById(id);

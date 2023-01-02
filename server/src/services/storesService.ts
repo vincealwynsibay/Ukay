@@ -1,46 +1,52 @@
 import User from "../models/userModel";
 import { Types } from "mongoose";
 import ExpressError from "../utils/ExpressError";
-import Store from "../models/storeModel";
+import storeModel from "../models/storeModel";
 import { uploadImage } from "../utils/imageUpload";
+import { paginateModel } from "src/utils/paginate";
 
 // create store
 const create = async (user_id: Types.ObjectId, storeParams: any) => {
 	const { name } = storeParams;
 
-	if (await Store.findOne({ name })) {
+	if (await storeModel.findOne({ name })) {
 		throw new ExpressError("Store name " + name + " is already taken", 400);
 	}
 
 	storeParams.avatar = await uploadImage(storeParams.avatar);
 	storeParams.userId = user_id;
 
-	const store = new Store(storeParams);
+	const store = new storeModel(storeParams);
 	await store.save();
 	return store;
 };
 
 // get by id
 const getById = async (id: string) => {
-	const store = await Store.findById(id);
+	const store = await storeModel.findById(id);
 	return store;
 };
 
 // get all stores
-const getAll = async () => {
-	const stores = await Store.find();
+const getAll = async (sortParams: any) => {
+	let stores;
+	if (sortParams.keys().length === 0) {
+		stores = await storeModel.find();
+	} else {
+		stores = await storeModel.find().sort(sortParams);
+	}
 	return stores;
 };
 
 // get by name
 const getByName = async (name: string) => {
-	const store = await Store.find({ name });
+	const store = await storeModel.find({ name });
 	return store;
 };
 
 // toggle follow  store
 const toggleFollow = async (user_id: Types.ObjectId, store_id: string) => {
-	const store = await Store.findById(store_id);
+	const store = await storeModel.findById(store_id);
 
 	if (!store) {
 		throw new ExpressError(`Store ${store_id} not found`, 404);
@@ -68,7 +74,7 @@ const update = async (
 	store_id: string,
 	storeParams: any
 ) => {
-	const store = await Store.findById(store_id);
+	const store = await storeModel.findById(store_id);
 
 	if (!store) {
 		throw new ExpressError(`Store ${store_id} not found`, 404);
@@ -82,7 +88,7 @@ const update = async (
 	}
 
 	if (storeParams.name && store.name !== storeParams.name) {
-		if (await Store.findOne({ name: storeParams.name })) {
+		if (await store.findOne({ name: storeParams.name })) {
 			throw new ExpressError(
 				"Name " + storeParams.name + " is already taken",
 				400
@@ -101,7 +107,7 @@ const update = async (
 
 // delete store
 const _delete = async (user_id: Types.ObjectId, store_id: string) => {
-	const store = await Store.findById(store_id);
+	const store = await storeModel.findById(store_id);
 
 	if (!store) {
 		throw new ExpressError(`Store ${store_id} not found`, 404);
@@ -114,7 +120,7 @@ const _delete = async (user_id: Types.ObjectId, store_id: string) => {
 		);
 	}
 
-	await Store.deleteOne({ id: store_id });
+	await store.deleteOne({ id: store_id });
 	await User.deleteOne({ id: user_id });
 	return;
 };

@@ -30,7 +30,6 @@ const updateUser = catchAsync(
 	async (req: IGetAuthRequest, res: express.Response) => {
 		const user = await usersService.update(req.params.id, req.body);
 		console.log("user", user);
-
 		return res.json(user);
 	}
 );

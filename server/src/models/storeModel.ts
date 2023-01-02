@@ -1,6 +1,6 @@
 import mongoose, { Schema, model, Types } from "mongoose";
 
-interface IStoreProfile {
+interface IStore {
 	_id: Types.ObjectId;
 	user_id: Types.ObjectId;
 	description: string;
@@ -11,7 +11,7 @@ interface IStoreProfile {
 	createdAt: Date;
 }
 
-const storeProfileSchema = new Schema<IStoreProfile>({
+const storeSchema = new Schema<IStore>({
 	name: { type: String, required: true },
 	user_id: { type: Schema.Types.ObjectId, ref: "User", required: true },
 	avatar: {
@@ -25,7 +25,7 @@ const storeProfileSchema = new Schema<IStoreProfile>({
 	createdAt: { type: Date, required: true, default: new Date() },
 });
 
-storeProfileSchema.set("toJSON", {
+storeSchema.set("toJSON", {
 	virtuals: true,
 	versionKey: false,
 	transform: function (_doc, ret) {
@@ -33,6 +33,6 @@ storeProfileSchema.set("toJSON", {
 	},
 });
 
-const storeProfileModel = model("Store", storeProfileSchema);
+const storeModel = model("Store", storeSchema);
 
-export default storeProfileModel;
+export default storeModel;

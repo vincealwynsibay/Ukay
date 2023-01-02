@@ -1,10 +1,14 @@
+import { order } from "./../types";
 import Store from "../models/storeModel";
-import Product from "../models/productModel";
+import Product, { IProduct } from "../models/productModel";
 import { Types } from "mongoose";
 import ExpressError from "../utils/ExpressError";
 import { uploadImages } from "../utils/imageUpload";
+import { paginateModel } from "src/utils/paginate";
+import productModel from "../models/productModel";
 
 // create product
+// TODO: notify followers of store
 const create = async (store_id: string, id: string, productParams: any) => {
 	const store = await Store.findById(store_id);
 
@@ -64,6 +68,37 @@ const getProductsOfStore = async (store_id: string) => {
 	}
 
 	const products = await Product.find({ store_id });
+	return products;
+};
+
+// TODO: get products by category
+const getByCategory = async (category: string) => {
+	const products = await Product.find({ category });
+	return products;
+};
+
+// sort products by store popularity
+const getSortedByStorePopularity = async (order: order) => {
+	const productsList: IProduct[] = [];
+	// sort stores by follower count in ascending order
+	const stores = await Store.find().sort({ followers: order });
+	stores.forEach(async (store) => {
+		const products = await Product.find({ store_id: store._id });
+		productsList.push(...products);
+	});
+
+	return productsList;
+};
+
+// sort products by price
+const getSortedByPrice = async (order: order) => {
+	const products = await Product.find().sort({ price: order });
+	return products;
+};
+
+// sort by date added
+const getSortedByDateAdded = async (order: order) => {
+	const products = await Product.find().sort({ createdAt: order });
 	return products;
 };
 
@@ -133,6 +168,10 @@ const _delete = async (store_id: string, product_id: string) => {
 export default {
 	create,
 	getById,
+	getByCategory,
+	getSortedByStorePopularity,
+	getSortedByPrice,
+	getSortedByDateAdded,
 	getProductsOfStore,
 	update,
 	delete: _delete,

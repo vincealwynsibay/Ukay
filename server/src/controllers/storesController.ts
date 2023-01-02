@@ -8,6 +8,9 @@ import { checkAuth, checkRole } from "../utils/jwt";
 import ordersService from "../services/ordersService";
 import productsService from "../services/productsService";
 import { upload } from "../utils/imageUpload";
+import { sort } from "src/utils/sort";
+import { paginate } from "src/utils/paginate";
+import storeModel from "src/models/storeModel";
 
 export const router = Router({ mergeParams: true });
 
@@ -25,9 +28,27 @@ const getStoreById = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllStores = catchAsync(async (req: Request, res: Response) => {
-	const stores = await storesService.getAll();
+	let sortParams = {};
+
+	if (req.query.followers) {
+		sortParams = { ...sortParams, followers: req.query.order };
+	}
+
+	if (req.query.rating) {
+		sortParams = { ...sortParams, rating: req.query.order };
+	}
+
+	if (req.query.reviews) {
+		sortParams = { ...sortParams, reviews: req.query.order };
+	}
+
+	const stores = await storesService.getAll(sortParams);
 	return res.json(stores);
 });
+
+const getStorePaginated = async (req: Request, res: Response) => {
+	return res.json((res as any).paginatedResults);
+};
 
 const getStoreByName = catchAsync(async (req: Request, res: Response) => {
 	const store = await storesService.getByName(req.params.name);
@@ -97,9 +118,21 @@ router.get("/:id", getStoreById);
 // get store by name
 router.get("/:name", getStoreByName);
 
+// // GET /api/stores/
+// // get all stores
+// router.get("/", getAllStores);
+
 // GET /api/stores/
-// get all stores
-router.get("/", getAllStores);
+// get paginated stores
+router.get(
+	"/",
+	sort([
+		["followers", "array"],
+		["reviews", "array"],
+	]),
+	paginate(storeModel),
+	getStorePaginated
+);
 
 // PUT /api/stores/:id/follow
 // follow a store
