@@ -8,9 +8,9 @@ import { checkAuth, checkRole } from "../utils/jwt";
 import ordersService from "../services/ordersService";
 import productsService from "../services/productsService";
 import { upload } from "../utils/imageUpload";
-import { sort } from "src/utils/sort";
-import { paginate } from "src/utils/paginate";
-import storeModel from "src/models/storeModel";
+import { sort } from "../utils/sort";
+import { paginate } from "../utils/paginate";
+import storeModel from "../models/storeModel";
 
 export const router = Router({ mergeParams: true });
 

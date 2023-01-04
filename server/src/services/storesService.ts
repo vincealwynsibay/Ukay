@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 import ExpressError from "../utils/ExpressError";
 import storeModel from "../models/storeModel";
 import { uploadImage } from "../utils/imageUpload";
-import { paginateModel } from "src/utils/paginate";
+import { paginateModel } from "../utils/paginate";
 
 // create store
 const create = async (user_id: Types.ObjectId, storeParams: any) => {
@@ -88,7 +88,7 @@ const update = async (
 	}
 
 	if (storeParams.name && store.name !== storeParams.name) {
-		if (await store.findOne({ name: storeParams.name })) {
+		if (await storeModel.findOne({ name: storeParams.name })) {
 			throw new ExpressError(
 				"Name " + storeParams.name + " is already taken",
 				400

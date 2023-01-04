@@ -22,6 +22,10 @@ app.use(morgan("common"));
 app.use(cors());
 app.use(bodyParser.json());
 
+// SEED Database
+// import { seeder } from "./seeder/seed";
+// seeder().catch();
+
 app.get("/ping", (_req, res) => {
 	res.send("nice");
 });

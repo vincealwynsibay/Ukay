@@ -1,7 +1,7 @@
 import mongoose, { Schema, model, Types } from "mongoose";
 
 export interface IProduct {
-	_id: Types.ObjectId;
+	id: Types.ObjectId;
 	store_id: Types.ObjectId;
 	name: string;
 	price: number;

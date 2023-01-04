@@ -1,7 +1,7 @@
 import mongoose, { Schema, model, Types } from "mongoose";
 
-interface IStore {
-	_id: Types.ObjectId;
+export interface IStore {
+	id: Types.ObjectId;
 	user_id: Types.ObjectId;
 	description: string;
 	name: string;

@@ -1,6 +1,6 @@
 import { Model } from "mongoose";
 import { NextFunction, Request, Response } from "express";
-import { IGetPaginatedResultsResponse } from "src/types";
+import { IGetPaginatedResultsResponse } from "../types";
 
 export const paginateModel = async (
 	model: any,

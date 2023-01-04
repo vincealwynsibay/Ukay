@@ -4,7 +4,7 @@ import Product, { IProduct } from "../models/productModel";
 import { Types } from "mongoose";
 import ExpressError from "../utils/ExpressError";
 import { uploadImages } from "../utils/imageUpload";
-import { paginateModel } from "src/utils/paginate";
+import { paginateModel } from "../utils/paginate";
 import productModel from "../models/productModel";
 
 // create product

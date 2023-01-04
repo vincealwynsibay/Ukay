@@ -5,12 +5,14 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "jest --silent=false --verbose false",
-		"dev": "concurrently \"tsc -w\" \"nodemon ./dist/server.js\""
+		"dev": "concurrently \"tsc -w\" \"nodemon ./dist/server.js\"",
+		"seed": "concurrently \"tsc -w\" && \"node ./dist/seeder/seed.js\""
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"devDependencies": {
+		"@faker-js/faker": "^7.6.0",
 		"@types/bcryptjs": "^2.4.2",
 		"@types/body-parser": "^1.19.2",
 		"@types/cors": "^2.8.13",

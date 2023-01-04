@@ -1,12 +1,12 @@
-import { sort } from "src/utils/sort";
+import { sort } from "../utils/sort";
 import { IGetAuthRequest, order } from "./../types";
 import catchAsync from "../utils/catchAsync";
 import { Request, Response, Router } from "express";
 import productsService from "../services/productsService";
 import { checkRole } from "../utils/jwt";
 import { upload } from "../utils/imageUpload";
-import { paginate } from "src/utils/paginate";
-import productModel from "src/models/productModel";
+import { paginate } from "../utils/paginate";
+import productModel from "../models/productModel";
 
 export const router = Router({ mergeParams: true });
 
