@@ -38,6 +38,7 @@ export function AuthContextProvider({ children }: Props) {
 	const [state, dispatch] = useReducer(authReducer, initialState);
 
 	let user: any = null;
+
 	if (state.token) {
 		user = useQuery(["user"], () => {
 			return axios.get("http://localhost:5000/api/users/me", {
@@ -52,8 +53,6 @@ export function AuthContextProvider({ children }: Props) {
 	useEffect(() => {
 		dispatch({ type: "READY_AUTH", payload: user });
 	}, []);
-
-	console.log(state);
 
 	return (
 		<AuthContext.Provider value={{ ...state, dispatch }}>

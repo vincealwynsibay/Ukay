@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import StoreRegister from "./components/auth/StoreRegister";
 import CustomerRegister from "./components/auth/CustomerRegister";
 import { useAuthContext } from "./context/AuthContext";
+import Login from "./components/auth/Login";
 
 function App() {
 	// const { data, isLoading } = useQuery({
@@ -31,6 +32,7 @@ function App() {
 						<Routes>
 							<Route path='/' element={<div>home</div>} />
 							<Route path='/register' element={<Register />} />
+							<Route path='/login' element={<Login />} />
 							<Route
 								path='/register/customer'
 								element={<CustomerRegister />}
