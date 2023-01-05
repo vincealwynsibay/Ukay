@@ -40,7 +40,11 @@ const register = async (userCredentials: any) => {
 	const user = new User({ ...userCredentials, password: passwordHash });
 	await user.save();
 
-	return user;
+	const token = await jwt.sign({ sub: user.id }, process.env.JWT_SECRET!, {
+		expiresIn: "7d",
+	});
+
+	return { user, token };
 };
 
 // TODO: Authenticate Thru Google

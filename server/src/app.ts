@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 // seeder().catch();
 
 app.get("/ping", (_req, res) => {
-	res.send("nice");
+	res.json({ message: "nice" });
 });
 
 app.post(

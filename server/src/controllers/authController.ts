@@ -13,8 +13,8 @@ const authenticate = catchAsync(
 
 const register = catchAsync(
 	async (req: express.Request, res: express.Response) => {
-		await usersService.register(req.body);
-		return res.json({ ok: true });
+		const { user, token } = await usersService.register(req.body);
+		return res.json({ user, token });
 	}
 );
 

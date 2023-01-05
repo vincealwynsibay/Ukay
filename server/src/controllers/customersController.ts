@@ -55,7 +55,7 @@ const getReservationsByUser = catchAsync(
 	}
 );
 
-// POST /api/profile/
+// POST /api/customers/
 router.post(
 	"/",
 	checkAuth,
@@ -64,13 +64,13 @@ router.post(
 	createCustomerProfile
 );
 
-// GET /api/profile/:id
+// GET /api/customers/:id
 router.get("/:id", getProfileByUserId);
 
-// GET /api/profile/:username
+// GET /api/customers/:username
 router.get("/:username", getProfileByUsername);
 
-// PUT /api/profile/:id
+// PUT /api/customers/:id
 router.put(
 	"/:id",
 	checkAuth,
@@ -79,7 +79,7 @@ router.put(
 	updateProfile
 );
 
-// DELETE /api/profile/:id
+// DELETE /api/customers/:id
 router.delete("/:id", checkAuth, checkRole("customer"), deleteProfile);
 
 // GET /api/users/:id/reservations

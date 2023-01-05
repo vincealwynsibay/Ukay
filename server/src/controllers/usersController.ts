@@ -12,6 +12,13 @@ const getUserById = catchAsync(
 	}
 );
 
+const getMe = catchAsync(
+	async (req: IGetAuthRequest, res: express.Response) => {
+		const user = await usersService.getById(req.user.id);
+		return res.json(user);
+	}
+);
+
 const getAll = catchAsync(
 	async (req: express.Request, res: express.Response) => {
 		const users = await usersService.getAll();
@@ -43,6 +50,9 @@ const deleteUser = catchAsync(
 );
 // GET /api/users/
 router.get("/", getAll);
+
+// GET /api/users/me
+router.get("/me", checkAuth, getMe);
 
 // GET /api/users/:id
 router.get("/:id", getUserById);
