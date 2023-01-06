@@ -106,10 +106,7 @@ const getOrdersByStore = catchAsync(
 // get paginated stores
 router.get(
 	"/",
-	sort([
-		["followers", "array"],
-		["reviews", "array"],
-	]),
+	sort([["followers_count"], ["reviews_count"]]),
 	paginate(storeModel),
 	getStorePaginated
 );

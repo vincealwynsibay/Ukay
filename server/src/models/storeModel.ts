@@ -7,7 +7,9 @@ export interface IStore {
 	name: string;
 	avatar: string;
 	followers: Types.ObjectId[];
+	followers_count: number;
 	reviews: Types.ObjectId[];
+	reviews_count: number;
 	createdAt: Date;
 }
 

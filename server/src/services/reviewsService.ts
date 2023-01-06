@@ -42,6 +42,7 @@ const createReview = async (
 	const savedReview = await review.save();
 
 	store.reviews.unshift(savedReview.id);
+	store.reviews_count = store.reviews.length;
 	await store.save();
 
 	return { savedReview, store };

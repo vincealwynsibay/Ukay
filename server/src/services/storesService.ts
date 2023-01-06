@@ -59,9 +59,11 @@ const toggleFollow = async (user_id: Types.ObjectId, store_id: string) => {
 		store.followers = store.followers.filter(
 			(follower: any) => follower.toString() !== user_id
 		);
+		store.followers_count -= 1;
 	} else {
 		// else add to followers
 		store.followers.unshift(user_id);
+		store.followers_count += 1;
 	}
 
 	await store.save();

@@ -6,22 +6,12 @@ export function sort(sortTypes: any[][]) {
 
 		sortTypes.forEach(async (element) => {
 			// check if param exist in req.query
-			const elementVal = element[0] + ".length";
-			const elementType = element[1];
+			const elementVal = element[0];
 
-			if (elementType === "array") {
-				sortParams = {
-					...sortParams,
-					[elementVal]: {
-						$size: req.query[elementVal.toString()],
-					},
-				};
-			} else {
-				sortParams = {
-					...sortParams,
-					[elementVal]: req.query[elementVal] || "desc",
-				};
-			}
+			sortParams = {
+				...sortParams,
+				[elementVal]: req.query[elementVal] || "desc",
+			};
 		});
 
 		(req as any).sortTypes = sortTypes;
