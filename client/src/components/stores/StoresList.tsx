@@ -15,8 +15,6 @@ export default function StoresList({}: Props) {
 		return <div>loading...</div>;
 	}
 
-	console.log(stores.data);
-
 	return (
 		<div>
 			<h1>Stores List</h1>

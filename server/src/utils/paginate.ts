@@ -67,12 +67,15 @@ export function paginate(model: Model<any>) {
 			};
 		}
 
+		let sort = [];
+		sort = (req as any).sortParams;
+
 		try {
 			results.results = await model
 				.find()
 				.skip(startIndex)
 				.limit(limit)
-				.sort((req as any).sortParams)
+				.sort(sort)
 				.exec();
 			res.paginatedResults = results;
 			next();

@@ -22,6 +22,16 @@ const createStore = catchAsync(async (req: IGetAuthRequest, res: Response) => {
 
 	return res.json(store);
 });
+const getStorePaginated = async (req: Request, res: Response) => {
+	console.log("nice 2");
+	console.log("sort params", (req as any).sortParams);
+	console.log("sort Types", (req as any).sortTypes);
+	return res.json((res as any).paginatedResults);
+};
+const getStoreByName = catchAsync(async (req: Request, res: Response) => {
+	const store = await storesService.getByName(req.params.name);
+	return res.json(store);
+});
 
 const getStoreById = catchAsync(async (req: Request, res: Response) => {
 	const store = await storesService.getById(req.params.id);
@@ -45,15 +55,6 @@ const getAllStores = catchAsync(async (req: Request, res: Response) => {
 
 	const stores = await storesService.getAll(sortParams);
 	return res.json(stores);
-});
-
-const getStorePaginated = async (req: Request, res: Response) => {
-	return res.json((res as any).paginatedResults);
-};
-
-const getStoreByName = catchAsync(async (req: Request, res: Response) => {
-	const store = await storesService.getByName(req.params.name);
-	return res.json(store);
 });
 
 const toggleFollowStore = catchAsync(
@@ -101,6 +102,18 @@ const getOrdersByStore = catchAsync(
 	}
 );
 
+// GET /api/stores/
+// get paginated stores
+router.get(
+	"/",
+	sort([
+		["followers", "array"],
+		["reviews", "array"],
+	]),
+	paginate(storeModel),
+	getStorePaginated
+);
+
 // POST /api/stores/
 // create store
 router.post(
@@ -123,18 +136,6 @@ router.get("/:name", getStoreByName);
 // // get all stores
 // router.get("/", getAllStores);
 
-// GET /api/stores/
-// get paginated stores
-router.get(
-	"/",
-	sort([
-		["followers", "array"],
-		["reviews", "array"],
-	]),
-	paginate(storeModel),
-	getStorePaginated
-);
-
 // PUT /api/stores/:id/follow
 // follow a store
 router.put("/:id/follow", checkRole("customer"), checkAuth, toggleFollowStore);
@@ -155,7 +156,7 @@ router.delete("/:id", checkAuth, checkRole("store"), deleteStore);
 
 // GET /api/stores/:id/products/
 // get products of store
-router.get("/:id", getProductsOfStore);
+router.get("/:id/products", getProductsOfStore);
 
 // POST /api/stores/:id/reviews
 // create review

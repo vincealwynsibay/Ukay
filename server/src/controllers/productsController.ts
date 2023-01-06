@@ -21,6 +21,12 @@ const createProduct = catchAsync(
 	}
 );
 
+const getProductsPaginated = async (req: Request, res: Response) => {
+	console.log("sort params", (req as any).sortParams);
+	console.log("sort Types", (req as any).sortTypes);
+	return res.json((res as any).paginatedResults);
+};
+
 const getProductById = catchAsync(async (req: Request, res: Response) => {
 	const product = await productsService.getById(req.params.id);
 	return res.json(product);
@@ -57,10 +63,6 @@ const getProductsSortedByDateAdded = async (req: Request, res: Response) => {
 	return res.json(products);
 };
 
-const getProductsPaginated = async (req: Request, res: Response) => {
-	return res.json((res as any).paginatedResults);
-};
-
 const updateProduct = catchAsync(
 	async (req: IGetAuthRequest, res: Response) => {
 		const product = await productsService.update(
@@ -80,6 +82,15 @@ const deleteProduct = catchAsync(
 		);
 		return res.json(product);
 	}
+);
+
+// GET /api/products?types=...limit=...&page=...
+// paginate
+router.get(
+	"/",
+	sort([["createdAt"], ["price"]]),
+	paginate(productModel),
+	getProductsPaginated
 );
 
 // POST /api/products/
@@ -107,12 +118,3 @@ router.delete("/:store_id/:id", checkRole("store"), deleteProduct);
 // GET /api/products?category=...
 // filter by category
 router.get("/", getProductsByCategory);
-
-// GET /api/products?types=...limit=...&page=...
-// paginate
-router.get(
-	"/",
-	sort([["createdAt"], ["price"]]),
-	paginate(productModel),
-	getProductsPaginated
-);

@@ -18,7 +18,7 @@ import { upload, uploadImage, uploadImages } from "./utils/imageUpload";
 
 const app = express();
 
-app.use(morgan("common"));
+app.use(morgan("dev"));
 app.use(cors());
 app.use(bodyParser.json());
 

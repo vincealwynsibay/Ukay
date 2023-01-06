@@ -10,6 +10,9 @@ import { useAuthContext } from "./context/AuthContext";
 import Login from "./components/auth/Login";
 import StoreView from "./components/stores/StoreView";
 import StoresList from "./components/stores/StoresList";
+import CustomerView from "./components/customers/CustomerView";
+import ProductsList from "./components/products/ProductsList";
+import ProductView from "./components/products/ProductView";
 
 function App() {
 	// const { data, isLoading } = useQuery({
@@ -46,6 +49,26 @@ function App() {
 							{/* Store */}
 							<Route path='/store/:id' element={<StoreView />} />
 							<Route path='/stores/' element={<StoresList />} />
+
+							{/* Customer */}
+							<Route
+								path='/customers/:id'
+								element={<CustomerView />}
+							/>
+							{/* Products */}
+							<Route
+								path='/products/'
+								element={<ProductsList />}
+							/>
+
+							<Route
+								path='/stores/:store_id/products'
+								element={<ProductsList />}
+							/>
+							<Route
+								path='/products/:id'
+								element={<ProductView />}
+							/>
 						</Routes>
 					</BrowserRouter>
 				</div>
