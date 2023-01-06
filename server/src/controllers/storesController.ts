@@ -19,6 +19,7 @@ const createStore = catchAsync(async (req: IGetAuthRequest, res: Response) => {
 		avatar: req.file,
 		...req.body,
 	});
+
 	return res.json(store);
 });
 

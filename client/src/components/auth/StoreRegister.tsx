@@ -1,12 +1,26 @@
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 import React, { useState } from "react";
+import { useAuthContext } from "../../context/AuthContext";
 
 interface Props {}
 
 function StoreRegister({}: Props) {
-	const [formData, setFormData] = useState({
-		avatar: "",
+	const [formData, setFormData] = useState<any>({
+		avatar: {},
 		name: "",
 		description: "",
+	});
+
+	const { token } = useAuthContext();
+
+	const mutation = useMutation(async (data: any) => {
+		return await axios.post("http://localhost:5000/api/stores", data, {
+			headers: {
+				"Content-Type": "multipart/form-data",
+				Authorization: `Bearer ${token}`,
+			},
+		});
 	});
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -15,7 +29,18 @@ function StoreRegister({}: Props) {
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		console.log(formData);
+		const data = new FormData();
+		for (const [key, value] of Object.entries(formData)) {
+			data.append(key, value as any);
+		}
+
+		mutation.mutate(data);
+	};
+
+	const handleAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (!e.target.files) return;
+		const file = e.target.files[0];
+		setFormData({ ...formData, avatar: file });
 	};
 
 	return (
@@ -26,9 +51,9 @@ function StoreRegister({}: Props) {
 					<label htmlFor='avatar'>Avatar</label>
 					<input
 						type='file'
-						onChange={handleChange}
 						name='avatar'
 						id='avatar'
+						onChange={handleAvatar}
 					/>
 				</div>
 				<div className='name'>

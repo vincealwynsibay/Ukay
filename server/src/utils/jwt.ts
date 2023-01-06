@@ -27,30 +27,31 @@ export const checkAuth = catchAsync(
 		}
 
 		(req as any).user = user;
+		(req as any).role = user.role;
 
-		// // check role and find store or customer profile
-		// // and attach the id to req.user
-		// if (user.role.toLowerCase() === "store") {
-		// 	const store = await Store.findOne({ user_id: user.id });
+		// check role and find store or customer profile
+		// and attach the id to req.user
+		if (user.role.toLowerCase() === "store") {
+			const store = await Store.findOne({ user_id: user.id });
 
-		// 	if (!store) {
-		// 		throw new ExpressError(
-		// 			`Store not found for user ${user.id}`,
-		// 			401
-		// 		);
-		// 	}
+			if (!store) {
+				throw new ExpressError(
+					`Store not found for user ${user.id}`,
+					401
+				);
+			}
 
-		// 	(req as any).user.store = store.id;
-		// } else if (user.role.toLowerCase() === "customer") {
-		// 	const customer = await Customer.findOne({ user_id: user.id });
-		// 	if (!customer) {
-		// 		throw new ExpressError(
-		// 			`Profile not found for user ${user.id}`,
-		// 			401
-		// 		);
-		// 	}
-		// 	(req as any).user.customer = customer.id;
-		// }
+			(req as any).user.store = store.id;
+		} else if (user.role.toLowerCase() === "customer") {
+			const customer = await Customer.findOne({ user_id: user.id });
+			if (!customer) {
+				throw new ExpressError(
+					`Profile not found for user ${user.id}`,
+					401
+				);
+			}
+			(req as any).user.customer = customer.id;
+		}
 
 		next();
 	}
@@ -66,6 +67,7 @@ export const checkRole = (role: string) => {
 					401
 				);
 			}
+			next();
 		}
 	);
 };

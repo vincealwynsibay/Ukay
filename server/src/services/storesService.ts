@@ -14,7 +14,7 @@ const create = async (user_id: Types.ObjectId, storeParams: any) => {
 	}
 
 	storeParams.avatar = await uploadImage(storeParams.avatar);
-	storeParams.userId = user_id;
+	storeParams.user_id = user_id;
 
 	const store = new storeModel(storeParams);
 	await store.save();

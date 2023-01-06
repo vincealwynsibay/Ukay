@@ -15,6 +15,7 @@ const getUserById = catchAsync(
 const getMe = catchAsync(
 	async (req: IGetAuthRequest, res: express.Response) => {
 		const user = await usersService.getById(req.user.id);
+
 		return res.json(user);
 	}
 );

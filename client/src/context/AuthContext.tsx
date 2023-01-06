@@ -40,19 +40,28 @@ export function AuthContextProvider({ children }: Props) {
 	let user: any = null;
 
 	if (state.token) {
-		user = useQuery(["user"], () => {
-			return axios.get("http://localhost:5000/api/users/me", {
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${state.token}`,
-				},
-			});
+		const userData = useQuery(["user"], async () => {
+			const { data } = await axios.get(
+				"http://localhost:5000/api/users/me",
+				{
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${state.token}`,
+					},
+				}
+			);
+			return data;
 		});
+		if (userData.isSuccess) {
+			user = userData.data;
+		}
 	}
 
 	useEffect(() => {
 		dispatch({ type: "READY_AUTH", payload: user });
-	}, []);
+	}, [user]);
+
+	console.log(state);
 
 	return (
 		<AuthContext.Provider value={{ ...state, dispatch }}>
@@ -61,13 +70,21 @@ export function AuthContextProvider({ children }: Props) {
 	);
 }
 
-export const useAuthContext = () => {
+type contextValue = {
+	isAuthReady: boolean;
+	user: any;
+	token: any;
+	dispatch: any;
+};
+
+export const useAuthContext = (): contextValue => {
 	const context = useContext(AuthContext);
 
-	if (context === undefined) {
+	if (!context) {
 		throw new Error(
 			"useAuthContext must be used within a AuthContextProvider"
 		);
 	}
+
 	return context;
 };

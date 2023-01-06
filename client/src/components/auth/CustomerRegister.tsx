@@ -1,34 +1,45 @@
 import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import { useAuthContext } from "../../context/AuthContext";
 interface Props {}
 
 function CustomerRegister({}: Props) {
-	const [formData, setFormData] = useState({
-		avatar: "",
+	const [formData, setFormData] = useState<any>({
+		avatar: {},
 		username: "",
 		description: "",
 	});
 
-	const { avatar, username, description } = formData;
-
-	const mutation = useMutation((formData: any) => {
-		return axios.post("http://localhost:5000/api/customers", formData);
+	const mutation = useMutation(async (data: any) => {
+		return await axios.post("http://localhost:5000/api/customers", data, {
+			headers: {
+				"Content-Type": "multipart/form-data",
+				Authorization: `Bearer ${token}`,
+			},
+		});
 	});
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
-	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		const data = await mutation.mutateAsync({
-			avatar,
-			username,
-			description,
-		});
+	const { token } = useAuthContext();
 
-		console.log(data);
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const data = new FormData();
+		for (const [key, value] of Object.entries(formData)) {
+			data.append(key, value as any);
+		}
+
+		mutation.mutate(data);
+	};
+
+	const handleAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (!e.target.files) return;
+		const file = e.target.files[0];
+		setFormData({ ...formData, avatar: file });
 	};
 
 	return (
@@ -39,7 +50,7 @@ function CustomerRegister({}: Props) {
 					<label htmlFor='avatar'>Avatar</label>
 					<input
 						type='file'
-						onChange={handleChange}
+						onChange={handleAvatar}
 						name='avatar'
 						id='avatar'
 					/>

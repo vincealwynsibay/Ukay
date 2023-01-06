@@ -19,8 +19,8 @@ function Register({}: Props) {
 
 	const navigate = useNavigate();
 
-	const mutation = useMutation((userCredentials: any) => {
-		return axios.post(
+	const mutation = useMutation(async (userCredentials: any) => {
+		return await axios.post(
 			"http://localhost:5000/api/auth/register",
 			userCredentials
 		);
@@ -44,8 +44,8 @@ function Register({}: Props) {
 				firstName,
 				lastName,
 				password,
+				role,
 			});
-			console.log(res.data.token);
 			dispatch({ type: "LOGIN", payload: res.data.token });
 
 			if (role === "customer") {
@@ -53,7 +53,7 @@ function Register({}: Props) {
 				navigate("/register/customer");
 			} else {
 				// register as vendor
-				navigate("/register/vendor");
+				navigate("/register/store");
 			}
 		}
 	};
