@@ -8,6 +8,8 @@ import StoreRegister from "./components/auth/StoreRegister";
 import CustomerRegister from "./components/auth/CustomerRegister";
 import { useAuthContext } from "./context/AuthContext";
 import Login from "./components/auth/Login";
+import StoreView from "./components/stores/StoreView";
+import StoresList from "./components/stores/StoresList";
 
 function App() {
 	// const { data, isLoading } = useQuery({
@@ -41,6 +43,9 @@ function App() {
 								path='/register/store'
 								element={<StoreRegister />}
 							/>
+							{/* Store */}
+							<Route path='/store/:id' element={<StoreView />} />
+							<Route path='/stores/' element={<StoresList />} />
 						</Routes>
 					</BrowserRouter>
 				</div>

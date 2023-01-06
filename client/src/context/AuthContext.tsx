@@ -61,8 +61,6 @@ export function AuthContextProvider({ children }: Props) {
 		dispatch({ type: "READY_AUTH", payload: user });
 	}, [user]);
 
-	console.log(state);
-
 	return (
 		<AuthContext.Provider value={{ ...state, dispatch }}>
 			{children}
